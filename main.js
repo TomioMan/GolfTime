@@ -1128,7 +1128,7 @@ function gradeLevel(worldIndex, levelIndex) {
         const slot2 = new Audio('media/sounds/slot-machine-2.mp3');
         slot2.volume = 0.7;
 
-        const gradeSfxS = new Audio('media/sounds/grade-sfx-s.mp3');
+        const gradeSfxS = new Audio('media/sounds/grade-sfx-S.mp3');
         gradeSfxS.volume = 0.2;
         const gradeSfxA = new Audio('media/sounds/grade-sfx-a.mp3');
         gradeSfxA.volume = 0.4;
