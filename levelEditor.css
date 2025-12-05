@@ -1,0 +1,132 @@
+
+table {
+  border-collapse: collapse;
+}
+td {
+    width: 45px;
+    height: 41px;
+    
+    /*border: solid 0.1px #000;*/
+}
+.empty {
+    cursor: pointer;
+    width: 45px;
+    height: 41px;
+    transform: translateY(2px) scaleY(1.09);
+    border: none;
+    background-color: #ffffff81;
+}
+.squere {
+    border: none;
+    width: 45px;
+    height: 41px;
+    transform: translateY(2px) scaleY(1.1);
+    cursor: pointer;
+    background-color: #777;
+}
+.triangle-1, .triangle-2, .triangle-3, .triangle-4 {
+    border: none;
+    width: 45px;
+    height: 41px;
+    transform: translateY(2px) scaleY(1.1);
+    cursor: pointer;
+}
+.triangle-1{
+    background: #ffffff;
+    background: linear-gradient(43deg,#ffffff81 49%, #777 50%);
+}
+.triangle-2{
+    background: #ffffff;
+    background: linear-gradient(calc(47deg + 90deg),#ffffff81 49%, #777 50%);
+}
+.triangle-3{
+    background: #ffffff;
+    background: linear-gradient(calc(43deg + 180deg),#ffffff81 49%, #777 50%);
+}
+.triangle-4{
+    background: #ffffff;
+    background: linear-gradient(calc(47deg + 270deg),#ffffff81 49%, #777 50%);
+}
+.point {
+    border: none;
+    width: 45px;
+    height: 41px;
+    transform: translateY(2px) scaleY(1.1);
+    cursor: pointer;
+    background: #ffffff;
+    background: radial-gradient(circle,#00ff44 25%, #ffffff81 30%);
+}
+.ball {
+    border: none;
+    width: 45px;
+    height: 41px;
+    transform: translateY(2px) scaleY(1.1);
+    cursor: pointer;
+    background: #ffffff;
+    background: radial-gradient(circle,#ffffff 55%, #ffffff81 60%);
+}
+.descructive {
+    border: none;
+    width: 45px;
+    height: 41px;
+    transform: translateY(2px) scaleY(1.1);
+    cursor: pointer;
+    background: #ff0000;
+}
+.hole {
+    border: none;
+    width: 45px;
+    height: 41px;
+    transform: translateY(2px) scaleY(1.1);
+    cursor: pointer;
+    background: #ffffff;
+    background: radial-gradient(circle,#000000 55%, #ffffff81 60%);
+}
+#Output{
+    padding: 5px;
+    color: #131313;
+    font-size: 8px;
+    font-weight: 1000;
+    white-space: pre-line;
+}
+.sidebar_top{
+    height: 50px;
+}
+.new-amsterdam-regular {
+    font-family: "New Amsterdam", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+.dynapuff {
+    font-family: "DynaPuff", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+}
+h1 {
+    margin-top: 10px;
+    font-size: 30px;
+    color: white;
+    font-family: comic sans ms, sans-serif;
+}
+.sidebar_top button {
+    width: 90%;
+    margin: 50px 10px 50px 10px;
+    padding: 2px;
+}
+.sidebar_top button p{
+    transform: scaleX(1.3) translateX(0%);
+    font-weight: 1000;
+    width: 260px;
+}
+.sidebar_bottom button{
+    width: 90%;
+    margin: 2px;
+    padding: 2px;
+}
+.sidebar_bottom button p{
+    transform: scaleX(1.5) translateX(0%);
+    font-weight: 1000;
+    width: 260px;
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[[CREDITS]]</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: black;
+            color: white;
+            font-family: "Courier New", monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .credits {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            text-align: center;
+        }
+
+        h1 {
+        font-size: 5em;
+        margin-top: 10vw;
+        }   
+        h2 {
+            font-size: 3em;
+        }
+        p {
+            font-size: 2em;
+            margin-bottom: 2vw;
+        }
+    </style>
+</head>
+<body>
+    <div class="credits" id="credits">
+        <h1>CREATED BY:</h1>
+        <a href="https://tomioman.github.io/Portfolio"><img src="https://tomioman.github.io/Portfolio/images/logo_text.png" alt="" style="width: 80vw;"></a>
+        <h1>INSPIRATIONS FOR MY GAME:</h1>
+        <a href="https://slappyhappy2000.itch.io/uncanny-cat-golf"><img src="https://img.itch.zone/aW1nLzE3NjM0MDA2LnBuZw==/350x196%23c/FYl8MS.png" alt="" style="width: 50vw;" ></a>
+        <a href="https://cz.pinterest.com/pin/161425967882280432"><img src="https://i.pinimg.com/736x/b3/08/a4/b308a484648c046f192823e6714b93b7.jpg" alt="" style="width: 50vw;" ></a>
+        <h1>MEDIA USED</h1>
+        <a href="https://www.myinstants.com/en/instant/sonic-spring"><p>MAX CHARGE SOUNDEFFECT</p></a>
+        <a href="https://www.myinstants.com/en/instant/mi-bombo-duolingo-84018"><p>LOW CHARGE SOUNDEFFECT</p></a>
+        <a href="https://www.myinstants.com/en/instant/roblox-explosion-sound-48524"><p>DESTROY BOX BOOM</p></a>
+        <a href="https://www.myinstants.com/en/instant/sonic-ringssssssss-46119"><p>COIN PICKUP SOUND</p></a>
+        <a href="https://www.youtube.com/watch?v=YRPi-aCWvVA&list=PLOo7ggkPh_eo_9VWXiQuoFdXyH9lGVwcT&index=2"><p>EDITOR MUSIC</p></a>
+        <a href="https://www.youtube.com/watch?v=HM80hXX_yAo"><p>LEVEL WIN SOUND EFFECT</p></a>
+        <a href="https://www.myinstants.com/en/instant/concrete-scrape-meme-sound-1525"><p>angle turner drag</p></a>
+        <a href="https://www.myinstants.com/en/instant/slot-machine2334335-89978"><p>win sound effects</p></a>
+        <a href="https://www.myinstants.com/en/instant/fail-horn"><p>F sound effect</p></a>
+        <a href="https://www.myinstants.com/en/instant/happy-kids-30618"><p>A sound effect</p></a>
+        <a href="https://www.myinstants.com/en/instant/golf-clap"><p>B sound effect</p></a>
+        <h1>Thank you and shout of for people who supported me along the development process:</h1>
+        <p>the entirety of the shy freaks.</p>
+        <img src="media/images/SHY FREAKS.png" alt="" style="width: 30vw;">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/7B70jFV8T40?si=P60KyibY4jx3jq2I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <p>
+            Thank you to my dear friend Alex for entertaining me with his stress. <br>
+            Thank you to my dear friend Adriana for being a person to look up to.<br>
+            Thank you to my dear friend Oskar for making me stress myself about the project so i was on time.<br>
+            Thank you to my dear friend Krystof for keeping his teamate not crazy.<br>
+            Thank you to my dear friend Jachym for being supportive and supplying his fart audio. <br>
+            <button onclick="fart()"> click to fart! </button> <br>
+            Thank you to my dear friend Milo for being the wonderful silly boy he is.
+        </p>
+        <p>.</p>
+        <p>and thank you to my friends from GÁMER PLEJS:</p>
+        <img src="media/images/GAMER PLEJS.png" alt="" style="width: 30vw;">
+        <p>
+            Thank you to my dear friend Martin for being amazed by everything i do because he doesnt know how to code.<br>
+            Thank you to my dear friend Daja for helping me get my drivers license in the process of making this project.<br>
+            Thank you to my dear friend Filip for farming primos and showing support.<br>
+            Thank you to my dear friend Ada for representing gamer plejs on dementiSMP while i couldnt play because of doign this project.
+        </p>
+        <h1>Thanks for playing my game!</h1>
+        <p>More might come in the future!</p>
+
+
+    </div>
+
+<script>
+function fart() {
+    var audio = new Audio('media/sounds/fart.mp3');
+    audio.play();
+}
+
+const credits = document.getElementById('credits');
+
+let y = document.body.clientHeight - 100;
+let speed = -0.5;
+let speedChange = 0;
+
+window.addEventListener('wheel', (event) => {
+    if (event.deltaY > 0) {
+        speedChange -= 0.5;
+    } else {
+        speedChange += 0.5;
+    }
+    speedChange = Math.max(Math.min(speedChange, 50), -3);
+});
+
+function animate() {
+    y += (speed + speedChange);
+    credits.style.top = `${y}px`;
+    if (y > window.innerHeight) {
+        y = -credits.offsetHeight;
+    }
+
+    speedChange *= 0.98;
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+</body>
+</html>

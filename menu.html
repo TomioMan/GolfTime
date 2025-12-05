@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[[MENU]]</title>
+    <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+    <div class="transition-box" id="transitionBox">
+        <div class="transition-box-in">DFDFSD</div>
+        <div class="transition-box-box">FDSFSD</div>
+    </div>
+    <!-- small screen warning -->
+    <div class="warning_box" id="warningBox">
+        <div class="warning_box_content">
+            <h1 id="warningBoxH1" >Your device's screen isn't large enough for the experience!</h1>
+            <div class="warning_box_display" id="warningBoxDisplay">
+                <p id="warningBoxDisplayHeight">0px</p>
+                <p id="warningBoxDisplayWidth">0px</p>
+            </div>
+            <p>If you do intend on continuing, please scale the website manually using either Ctrl+Scroll, or by going into the browser settings, thank you :)</p>
+            <h1 id="warningBoxENOUGH"></h1>
+            <button id="warningBoxButton">Resize to Continue</button>
+        </div>
+    </div>
+    <!-- level selector -->
+    <div class="level_selector" id="levelSelector">
+        <div class="level_selector_content">
+            <h1>LEVEL SELECTOR</h1>
+            <div class="level_selector_scroll">
+                <h1>WORLD 01</h1>
+                <div class="level_selector_world">
+                    <button onclick="goToLevel(0,0)"><p>01</p></button>
+                    <button onclick="goToLevel(0,1)"><p>02</p></button>
+                    <button onclick="goToLevel(0,2)"><p>03</p></button>
+                    <button onclick="goToLevel(0,3)"><p>04</p></button>
+                    <button onclick="goToLevel(0,4)"><p>05</p></button>
+                    <button onclick="goToLevel(0,5)"><p>06</p></button>
+                    <button onclick="goToLevel(0,6)"><p>07</p></button>
+                    <button onclick="goToLevel(0,7)"><p>08</p></button>
+                    <button onclick="goToLevel(0,8)"><p>09</p></button>
+                    <button onclick="goToLevel(0,9)"><p>10</p></button>
+                </div>
+                <h1>WORLD 02</h1>
+                <div class="level_selector_world">
+                    <button onclick="goToLevel(1,0)"><p>01</p></button>
+                    <button onclick="goToLevel(1,1)"><p>02</p></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- menu -->
+    <div class="menu">
+        <div class="menu_content">
+            <img src="media/images/LOGO.png" alt="" class="logo">
+            <button class="button" onclick="goToLevel(0,1)">GOLF TIME!!!</button>
+            <button class="button" onclick="openLevelSelection()">SELECT LEVEL</button>
+            <button class="button" onclick="Settings()">SETTINGS!</button>
+            <button class="button" onclick="goCredits()">CREDITS & SUCH</button>
+        </div>
+    </div>
+    <script src="menu.js"></script>
+</body>
+</html>

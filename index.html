@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[[GOLF TIME]]</title>
+    <link rel="stylesheet" href="style.css">
+        <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=New+Amsterdam&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- debug menu -->
+    <div class="debug" id="degugOutput">
+        <h2>ANGLE TURNER VALUES</h2>
+        <p id="debugAngleOutput"></p>
+        <h2>ANGLE TURNER VALUES</h2>
+        <p id="debugSpeedOutputTotal"></p>
+        <p id="debugSpeedOutputX"></p>
+        <p id="debugSpeedOutputY"></p>
+        <h2>CREATE EXPLOSIVE BOX</h2>
+        <div class="debugCenter">
+            <input type="number" id="createExBoxX" min="1" max="20" placeholder="X CORD (1-20)">
+            <input type="number" id="createExBoxY" min="1" max="20" placeholder="Y CORD (1-20)">
+        </div>
+        <div class="debugCenter">
+            <button id="debugCreateExplosive"><p>CREATE</p></button>
+        </div>
+        <h2>CREATE POINT</h2>
+        <div class="debugCenter">
+            <input type="number" id="createPointX" min="1" max="20" placeholder="X CORD (1-20)">
+            <input type="number" id="createPointY" min="1" max="20" placeholder="Y CORD (1-20)">
+        </div>
+        <div class="debugCenter">
+            <button id="debugCreatePoint"><p>CREATE</p></button>
+        </div>
+        <h2>CREATE WALL</h2>
+        <div class="debugCenter">
+            <input type="number" id="createWallX" min="1" max="20" placeholder="X CORD (1-20)">
+            <input type="number" id="createWallY" min="1" max="20" placeholder="Y CORD (1-20)">
+        </div>
+        <div class="debugCenter">
+            <input type="number" id="createWallLenghtX"  placeholder="X LENGTH (if none: 45)">
+            <input type="number" id="createWallLenghtY"  placeholder="Y LENGTH (if none: 45)">
+        </div>
+        <div class="debugCenter">
+            <button id="debugCreateWall"><p>CREATE</p></button>
+        </div>
+    </div>
+    <!-- transitions -->
+    <div class="start-transition-box" id="startTransitionBox">
+        <div class="transition-box-box"></div>
+        <div class="transition-box-out">i'm doing this the lazy way :P</div>
+    </div>
+    <div class="transition-box" id="transitionBox">
+        <div class="transition-box-in"></div>
+        <div class="transition-box-box"></div>
+        <div class="transition-box-out">secret!</div>
+    </div>
+    <!-- victory -->
+    <div class="victory_screen" id="victoryScreen">
+        <div class="victory_screen_content" id="victoryScreenContent">
+            <div class="victory_screen_top">
+                    <img src="media/images/VICTORY.png" alt="">
+            </div>
+            <div class="victory_screen_bottom">
+                <div class="victory_screen_left">
+                    <p class="victory_screen_left_level_name"><span id="victory_screen_levelIndicatorLevel">00</span>-<span id="victory_screen_levelIndicatorWorld">01</span> - <span id="victory_screen_levelIndicatorName">Basics</span></p>
+                    <p>Time: <span id="timer-win">0s</span></p>
+                    <p>Strikes: <span id="strikeCounter-win">0</span></p>
+                    <p><span id="pointCounter-win"></span></p>
+                    <div class="victory_screen_levels">
+                        <button id="previousLevelButton"><img src="media/images/arrow.png" alt=""></button>
+                        <button id="againLevelButton"><img src="media/images/again.png" alt=""></button>
+                        <button id="nextLevelButton"> <img src="media/images/arrow.png" alt="" style="transform: rotateZ(180deg) translateY(-3px);"></button>
+                    </div>
+                    <button onclick="goHome()"><p>I WANNA GO HOME</p></button>
+                </div>
+                <div class="victory_screen_right">
+                    <img id="gradeImage" src="" alt="">
+                    <div class="victory_screen_right_text">
+                        <p>S score: <br><span id="gradeIndicatorSscore">.</span></p>
+                        <p>Your score: <br><span id="gradeIndicatorGradeFinal">.</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- sidebar -->
+    <div class="sidebar">
+        <div class="sidebar_top">
+            <div class="sidebar_top_left">
+                <div class="sidebar_top_left">
+                    <div class="blast_button">
+                        <button id="blastButton"><div id="blastButtonInner"></div></button>
+                    </div>
+                    <div class="angle_turner">
+                        <canvas id="angle_turner" width="200" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar_top_right">
+                <div class="charger">
+                    <div class="charger_bar" id="chargerBar"></div>
+                    <img src="media/images/SO SMALL LOL.png" alt="" class="soSmall" id="soSmall">
+                </div>
+            </div>
+        </div>
+        <div class="sidebar_bottom">
+            <div class="level_indicator" id="levelIndicator">
+                <p><span id="levelIndicatorLevel">00</span>-<span id="levelIndicatorWorld">01</span> - <span id="levelIndicatorName">Basics</span></p>
+            </div>
+            <div class="level_stats">
+                <p class="level_time">Time: <span id="timer">0s</span></p>
+                <p class="level_hits">Strikes: <span id="strikeCounter">0</span></p>
+            </div>
+            <div class="victory_screen_levels_sidebar">
+                <button id="previousLevelButton2"><img src="media/images/arrow white.png" alt=""></button>
+                <button id="againLevelButton2"><img src="media/images/again white.png" alt=""></button>
+                <button id="nextLevelButton2"> <img src="media/images/arrow white.png" alt=""></button>
+            </div>
+        </div>
+    </div>
+    <!-- game 🥳 -->
+    <div class="game" id="game">
+
+    </div>
+    <script src="matter.js"></script>
+    <script src="level-data.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

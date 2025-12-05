@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[[EDITOR]]</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="levelEditor.css">
+        <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=New+Amsterdam&display=swap" rel="stylesheet">
+</head>
+<body>
+    <body>
+    <div class="sidebar">
+        <div class="sidebar_top">
+            <button id="exportButton"><p>Export all pressed blocks!</p></button>
+        </div>
+        <div class="sidebar_bottom">
+            <h1>Ball starting cords:</h1>
+            <button id="copyButtonBall"><p>Copy level info!</p></button>
+            <pre id="OutputBall"></pre>
+            <h1>Level info output:</h1>
+            <button id="copyButton"><p>Copy level info!</p></button>
+            <pre id="Output"></pre>
+        </div>
+    </div>
+    <div class="game" id="game">
+        <table>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+            <tr>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+                <td> <button class="empty"></button></td>
+            </tr>
+        </table>
+    </div>
+    <script src="matter.js"></script>
+    <script src="levelEditor.js"></script>
+</body>
+</html>
