@@ -443,3 +443,80 @@ body {
     font-family: "DynaPuff";
     font-size: 22px;
 }
+.end_screen {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.489);
+    color: white;
+    /*font-family: 'New Amsterdam', sans-serif;*/
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: right 200ms;
+    right: -100%;
+    z-index: 10;
+}
+.end_screen_content, .end_screen_inner {
+    background-color: rgba(0, 0, 0, 0.489);
+    font-family: comic sans ms, sans-serif;
+    color: white;
+    /*font-family: 'New Amsterdam', sans-serif;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: right;
+    border: rgb(255, 255, 255) 5px solid;
+    padding: 20px;
+    border-radius: 2px;
+    width: 500px;
+    height: 400px;
+}
+.end_screen_content > button {
+    width: 30px;
+    height: 37px;
+    margin-bottom: 15px;
+    border: #ff000050 solid 5px;
+    border-radius: 2px;
+    background-color: #8d000050;
+    color: #ff000050;
+    font-weight: 1000;
+    &:hover{ /*gosh why didnt i do it through opacity 😭*/
+        background-color: #8d0000;
+        color: #ff0000;
+        border: #ff0000 solid 5px;
+    }
+}
+.end_screen_inner{
+    width: 450px;
+    justify-content: start;
+    align-items: center;
+    h1 {
+        margin-bottom: 15px;
+        margin-top: -10px;
+        font-size: 29px;
+    }
+    p {
+        margin-bottom: 10px;
+    }
+    a {
+        color: white;
+    }
+    button {
+        border: rgb(255, 255, 255) 5px solid;
+        background-color: rgba(0, 0, 0, 0.489);
+        color: white;
+        padding: 5px 10px 10px 10px;
+        margin-top: 5px;
+        font-weight: 1000;
+        font-family: comic sans ms, sans-serif;
+        font-size: 20px;
+        border-radius: 2px;
+        opacity: 50%;
+        transition: 200ms;
+        &:hover{
+            opacity: 100%;
+        }
+    }
+}

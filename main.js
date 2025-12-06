@@ -977,6 +977,7 @@ previousLevelButton2.addEventListener('click', () => {
 function loadLevel(where) {
     transition();
     transitionEnded = false;
+    let moreLevels = true;
     // ifs for level indicator
     if (where == "foward") {
         setTimeout(() => {
@@ -1027,6 +1028,7 @@ function loadLevel(where) {
             levelIndex = 0;
         } else {
             console.log('No next level found.');
+            moreLevels = false;
         };
         if (debugMode){
             console.log(`next level: ${levelIndex + 1}-${worldIndex + 1}`);
@@ -1095,6 +1097,12 @@ function loadLevel(where) {
         gradeIndicatorGradeFinal.innerHTML = `.`;
         gradeIndicatorSscore.innerHTML = `.`;
 
+        setTimeout(() => {
+            if(!moreLevels) {
+                showEndScreen();
+            }
+        }, 1000)
+
     }, 1100)
 
     setTimeout(() => { // making it so the fancy level indicator can do its fancy animation again
@@ -1105,12 +1113,33 @@ function loadLevel(where) {
     }, 4300);
 }
 
+function showEndScreen() {
+    const endScreen = document.getElementById("endScreen");
+    endScreen.style.display = `flex`
+    endScreen.style.right = `0%`
+}
+
+const endScreenClose = document.getElementById("endScreenClose")
+endScreenClose.addEventListener("click", () => {
+    const endScreen = document.getElementById("endScreen");
+    endScreen.style.display = `none`
+    endScreen.style.right = `-100%`
+});
+
+function goTo(href) {
+    window.location.href = href
+};
+function goMenu() {
+    transition()
+    setTimeout(() => goTo("menu.html"), 1100);
+};
+
 const gradeImage = document.getElementById("gradeImage")
 
 function gradeLevel(worldIndex, levelIndex) {
     const gradeTime = time * 1;
     const gradeStrike = strikes  * 10;
-    const gradePoints = gamePoints  * -15;
+    const gradePoints = gamePoints  * -5;
 
     const gradeFinal = gradeTime + gradeStrike + gradePoints;
 
@@ -1225,3 +1254,4 @@ function gradeLevel(worldIndex, levelIndex) {
         gradeImage.src = "media/images/grade F.png";
     }
 }
+
