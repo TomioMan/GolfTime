@@ -766,33 +766,33 @@ noobModeClock = setInterval(noobModeToggle , 100)
 
 // noob mode drag and shoot
 document.addEventListener('mousedown', function(event) {
-isDragging = true;
-dragStart.x = event.clientX;
-dragStart.y = event.clientY;
+    isDragging = true;
+    dragStart.x = event.clientX;
+    dragStart.y = event.clientY;
 });
 
 document.addEventListener('mouseup', function(event) {
-if (!isDragging) {
-    return;
-    }   
-isDragging = false;
+    if (!isDragging) {
+        return;
+        }   
+    isDragging = false;
 
-let dx = dragStart.x - event.clientX;
-let dy = dragStart.y - event.clientY;
-if (debugMode) {
-    console.log("DirectionX: " + dx + " DirectionY: " + dy)
-}
-
-let power = 0.1;
-
-// Apply movement
-if (canFire) {
-    Body.setVelocity(ball, { x: (dx * power) * noobModePower, y: (dy * power) * noobModePower });
-    //addStrike();
-    if (noobMode) {
-        addStrike();
+    let dx = dragStart.x - event.clientX;
+    let dy = dragStart.y - event.clientY;
+    if (debugMode) {
+        console.log("DirectionX: " + dx + " DirectionY: " + dy)
     }
-};
+
+    let power = 0.1;
+
+    // Apply movement
+    if (canFire) {
+        Body.setVelocity(ball, { x: (dx * power) * noobModePower, y: (dy * power) * noobModePower });
+        //addStrike();
+        if (noobMode) {
+            addStrike();
+        }
+    };
 });
 
 // Applying the game menu things to the game
@@ -1151,90 +1151,91 @@ function gradeLevel(worldIndex, levelIndex) {
     let Sscore = 0;
     if (thisLevelObj && thisLevelObj.Sscore) { // check if there even is a Sscore
         Sscore = thisLevelObj.Sscore;
+    }
 
-        const slot1 = new Audio('media/sounds/slot-machine-1.mp3');
-        slot1.volume = 0.7;
-        const slot2 = new Audio('media/sounds/slot-machine-2.mp3');
-        slot2.volume = 0.7;
+    const slot1 = new Audio('media/sounds/slot-machine-1.mp3');
+    slot1.volume = 0.7;
+    const slot2 = new Audio('media/sounds/slot-machine-2.mp3');
+    slot2.volume = 0.7;
 
-        const gradeSfxS = new Audio('media/sounds/grade-sfx-S.mp3');
-        gradeSfxS.volume = 0.2;
-        const gradeSfxA = new Audio('media/sounds/grade-sfx-a.mp3');
-        gradeSfxA.volume = 0.4;
-        const gradeSfxB = new Audio('media/sounds/grade-sfx-b.mp3');
-        gradeSfxB.volume = 0.2;
-        const gradeSfxC = new Audio('media/sounds/grade-sfx-c.mp3');
-        gradeSfxC.volume = 0.7;
-        const gradeSfxD = new Audio('media/sounds/grade-sfx-d.mp3');
-        gradeSfxD.volume = 0.7;
-        const gradeSfxF = new Audio('media/sounds/grade-sfx-f.mp3');
-        gradeSfxF.volume = 0.2;
+    const gradeSfxS = new Audio('media/sounds/grade-sfx-S.mp3');
+    gradeSfxS.volume = 0.2;
+    const gradeSfxA = new Audio('media/sounds/grade-sfx-a.mp3');
+    gradeSfxA.volume = 0.4;
+    const gradeSfxB = new Audio('media/sounds/grade-sfx-b.mp3');
+    gradeSfxB.volume = 0.2;
+    const gradeSfxC = new Audio('media/sounds/grade-sfx-c.mp3');
+    gradeSfxC.volume = 0.7;
+    const gradeSfxD = new Audio('media/sounds/grade-sfx-d.mp3');
+    gradeSfxD.volume = 0.7;
+    const gradeSfxF = new Audio('media/sounds/grade-sfx-f.mp3');
+    gradeSfxF.volume = 0.2;
 
-        setTimeout(()=>{ //first input
-            slot1.play();
-        },700)
+    setTimeout(()=>{ //first input
+        slot1.play();
+    },700)
+    setTimeout(() => {
+        gradeIndicatorSscore.innerHTML = `${thisLevelObj.Sscore}`;
+        gradeIndicatorSscore.style.fontSize= `35px`
+        gradeIndicatorSscore.style.transform= `scaleX(1.5)`
+        slot2.play();
+        setTimeout(()=>{
+            gradeIndicatorSscore.style.fontSize= `25px`
+        },200)
         setTimeout(() => {
-            gradeIndicatorSscore.innerHTML = `${thisLevelObj.Sscore}`;
-            gradeIndicatorSscore.style.fontSize= `35px`
-            gradeIndicatorSscore.style.transform= `scaleX(1.5)`
+            gradeIndicatorGradeFinal.innerHTML = `${gradeFinal}`;
+            gradeIndicatorGradeFinal.style.fontSize= `35px`
             slot2.play();
             setTimeout(()=>{
-                gradeIndicatorSscore.style.fontSize= `25px`
+                gradeIndicatorGradeFinal.style.fontSize= `25px`
             },200)
+        }, 800);
+    }, 1000);
+    setTimeout(()=>{ //sound effect based on grade
+        if (gradeFinal <= Sscore) {
+            gradeImage.style.transform = `scale(1.1)`
             setTimeout(() => {
-                gradeIndicatorGradeFinal.innerHTML = `${gradeFinal}`;
-                gradeIndicatorGradeFinal.style.fontSize= `35px`
-                slot2.play();
-                setTimeout(()=>{
-                    gradeIndicatorGradeFinal.style.fontSize= `25px`
-                },200)
-            }, 800);
-        }, 1000);
-        setTimeout(()=>{ //sound effect based on grade
-            if (gradeFinal <= Sscore) {
-                gradeImage.style.transform = `scale(1.1)`
-                setTimeout(() => {
-                    gradeSfxS.play();
-                    gradeImage.style.transform = `scale(1)`
-                }, 100);
-            } 
-            else if (gradeFinal <= Sscore * 1.3) {
-                gradeImage.style.transform = `scale(1.1)`
-                setTimeout(() => {
-                    gradeSfxA.play();
-                    gradeImage.style.transform = `scale(1)`
-                }, 100);
-            } 
-            else if (gradeFinal <= Sscore * 1.6) {
-                gradeImage.style.transform = `scale(1.1)`
-                setTimeout(() => {
-                    gradeSfxB.play();
-                    gradeImage.style.transform = `scale(1)`
-                }, 100);
-            } 
-            else if (gradeFinal <= Sscore * 2){
-                gradeImage.style.transform = `scale(1.1)`
-                setTimeout(() => {
-                    gradeSfxC.play();
-                    gradeImage.style.transform = `scale(1)`
-                }, 100);
-            }
-            else if (gradeFinal <= Sscore * 3){
-                gradeImage.style.transform = `scale(1.1)`
-                setTimeout(() => {
-                    gradeSfxD.play();
-                    gradeImage.style.transform = `scale(1)`
-                }, 100);
-            }
-            else {
-                gradeImage.style.transform = `scale(1.1)`
-                setTimeout(() => {
-                    gradeSfxF.play();
-                    gradeImage.style.transform = `scale(1)`
-                }, 100);
-            }
-        },2500)
-    }
+                gradeSfxS.play();
+                gradeImage.style.transform = `scale(1)`
+            }, 100);
+        } 
+        else if (gradeFinal <= Sscore * 1.3) {
+            gradeImage.style.transform = `scale(1.1)`
+            setTimeout(() => {
+                gradeSfxA.play();
+                gradeImage.style.transform = `scale(1)`
+            }, 100);
+        } 
+        else if (gradeFinal <= Sscore * 1.6) {
+            gradeImage.style.transform = `scale(1.1)`
+            setTimeout(() => {
+                gradeSfxB.play();
+                gradeImage.style.transform = `scale(1)`
+            }, 100);
+        } 
+        else if (gradeFinal <= Sscore * 2){
+            gradeImage.style.transform = `scale(1.1)`
+            setTimeout(() => {
+                gradeSfxC.play();
+                gradeImage.style.transform = `scale(1)`
+            }, 100);
+        }
+        else if (gradeFinal <= Sscore * 3){
+            gradeImage.style.transform = `scale(1.1)`
+            setTimeout(() => {
+                gradeSfxD.play();
+                gradeImage.style.transform = `scale(1)`
+            }, 100);
+        }
+        else {
+            gradeImage.style.transform = `scale(1.1)`
+            setTimeout(() => {
+                gradeSfxF.play();
+                gradeImage.style.transform = `scale(1)`
+            }, 100);
+        }
+    },2500)
+
     if (gradeFinal <= Sscore) {
         gradeImage.src = "media/images/grade S.png";
     } 
