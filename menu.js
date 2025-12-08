@@ -106,6 +106,10 @@ function openLevelSelection() {
     levelSelector.style.display = "flex"
     levelSelector.style.right = "0%";
 };
+function closeLevelSelection() {
+    const levelSelector = document.getElementById("levelSelector")
+    levelSelector.style.right = "100%";
+}
 function goToLevel(worldIndex, levelIndex) {
     localStorage.setItem("worldIndex", worldIndex);
     localStorage.setItem("levelIndex", levelIndex);

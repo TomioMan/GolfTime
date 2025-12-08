@@ -520,3 +520,99 @@ body {
         }
     }
 }
+
+.tutorial {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    margin: 20px;
+    border: white double 8px;
+    border-radius: 2px;
+    color: white;
+    font-family: comic sans ms, sans-serif;
+    background-color: black;
+    opacity: 100%;
+    transition: 200ms;
+}
+.tutorial_yes_no {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 10px;
+    margin-top: 10px;
+    button {
+        font-family: comic sans ms, sans-serif;
+        padding: 5px;
+        border: white solid 3px;
+        border-radius: 2px;
+        color: white;
+        background-color: black;
+        transition: 200ms;
+        cursor: pointer;
+        &:hover{
+            color: rgb(0, 0, 0);
+            background-color: rgb(255, 255, 255);
+        }
+    }
+}
+.tutorialStep {
+    display: none;
+    position: relative;
+    top: 0px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    margin: 20px;
+    border: white double 8px;
+    border-radius: 2px;
+    color: white;
+    font-family: comic sans ms, sans-serif;
+    background-color: black;
+    opacity: 100%;
+    transition: 300ms;
+    z-index: 100;
+    button {
+        font-family: comic sans ms, sans-serif;
+        padding: 5px;
+        border: white solid 3px;
+        border-radius: 2px;
+        color: white;
+        background-color: black;
+        transition: 200ms;
+        cursor: pointer;
+        &:hover{
+            color: rgb(0, 0, 0);
+            background-color: rgb(255, 255, 255);
+        }
+    }
+    p {
+        margin-bottom: 5px;
+    }
+}
+#tutorialStep1 {
+    position: relative;
+    top: -550px;
+    left: 340px;
+    width: 300px;
+}
+#tutorialStep2 {
+    position: relative;
+    top: -200px;
+    left: 340px;
+    width: 300px;
+}
+#tutorialStep3 {
+    position: relative;
+    top: -150px;
+    left: 840px;
+    width: 300px;
+}
+#tutorialStep4 {
+    position: relative;
+    top: -300px;
+    left: 600px;
+    width: 400px;
+}
