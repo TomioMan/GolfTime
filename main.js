@@ -599,6 +599,147 @@ function playGifAtPosition(worldX, worldY, gifSrc = 'media/gifs/destroy-box.gif'
     }, duration);
 }
 
+// moving platforms support
+const movingPlatforms = [];
+
+function createMoving(pointsArray = [], speed = 100, waitMs = 500, w = 90, h = 16) {
+    if (!Array.isArray(pointsArray) || pointsArray.length === 0) return null;
+
+    // normalize points to center coordinates matching how other creators offset
+    const pts = pointsArray.map(p => ({ x: (p.X || p.x) + w / 2, y: (p.Y || p.y) + h / 2 }));
+
+    // create a static body and move it by setting position on each tick
+    const body = Bodies.rectangle(pts[0].x, pts[0].y, w, h, {
+        isStatic: true,
+        label: 'moving',
+        render: { fillStyle: '#00aaff' }
+    });
+
+    World.add(world, body);
+
+    const meta = {
+        body,
+        points: pts,
+        speed: Math.max(0, Number(speed) || 0),
+        waitMs: Math.max(0, Number(waitMs) || 0),
+        currentIndex: 0,
+        nextIndex: pts.length > 1 ? 1 : 0,
+        waiting: pts.length > 1 ? false : true,
+        waitUntil: 0
+    };
+
+    // if only one point, just stay there
+    if (pts.length === 1) meta.waiting = true;
+
+    movingPlatforms.push(meta);
+
+    return body;
+}
+
+// engine tick handler to move platforms
+Matter.Events.on(engine, 'beforeUpdate', function() {
+    const dt = (engine.timing.delta || 16) / 1000; // seconds
+
+    for (let i = 0; i < movingPlatforms.length; i++) {
+        const m = movingPlatforms[i];
+        if (!m || !m.body || !m.points || m.points.length === 0) continue;
+
+        if (m.waiting) {
+            if (Date.now() >= m.waitUntil) {
+                // resume movement; keep indices as set when we snapped to the point
+                m.waiting = false;
+            }
+            continue;
+        }
+
+        const target = m.points[m.nextIndex];
+        const pos = m.body.position;
+        const dx = target.x - pos.x;
+        const dy = target.y - pos.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 1 || m.speed <= 0) {
+            // snap to target and start waiting
+            Body.setPosition(m.body, { x: target.x, y: target.y });
+            m.waiting = true;
+            m.waitUntil = Date.now() + m.waitMs;
+            m.currentIndex = m.nextIndex;
+            m.nextIndex = (m.currentIndex + 1) % m.points.length;
+            continue;
+        }
+
+        const moveDist = m.speed * dt;
+        const t = Math.min(1, moveDist / dist);
+        const nx = pos.x + dx * t;
+        const ny = pos.y + dy * t;
+        Body.setPosition(m.body, { x: nx, y: ny });
+    }
+});
+
+// create a boost pad
+//unfuncioning for now, will fix later...?
+function createBoost(x, y, direction = 'right', power = 20) {
+    const w = 45;
+    const h = 45;
+    const centerX = x + w / 2;
+    const centerY = y + h / 2;
+
+    const body = Bodies.rectangle(centerX, centerY, w, h, {
+        isStatic: true,
+        label: 'boost',
+        render: { fillStyle: '#ffee00' }
+    });
+
+    // direction vector
+    let dir = { x: 1, y: 0 };
+    if (direction === 'left') dir = { x: -1, y: 0 };
+    else if (direction === 'up') dir = { x: 0, y: -1 };
+    else if (direction === 'down') dir = { x: 0, y: 1 };
+    else if (typeof direction === 'number') dir = { x: Math.cos(direction), y: Math.sin(direction) };
+
+    body.boostDir = dir;
+    body.boostPower = Number(power) || 20;
+
+    // draw arrow texture on a canvas and use as sprite
+    try {
+        const cv = document.createElement('canvas');
+        cv.width = w;
+        cv.height = h;
+        const c = cv.getContext('2d');
+        c.clearRect(0, 0, w, h);
+        c.translate(w / 2, h / 2);
+        let angle = 0;
+        if (direction === 'down') angle = Math.PI / 2;
+        else if (direction === 'left') angle = Math.PI;
+        else if (direction === 'up') angle = -Math.PI / 2;
+        c.rotate(angle);
+
+        // arrow body
+        c.fillStyle = '#ffea55';
+        c.strokeStyle = '#000000';
+        c.lineWidth = 2;
+        const aw = Math.min(w, h) * 0.35;
+        c.beginPath();
+        c.moveTo(-aw, -aw / 2);
+        c.lineTo(0, -aw / 2);
+        c.lineTo(0, -aw);
+        c.lineTo(aw, 0);
+        c.lineTo(0, aw);
+        c.lineTo(0, aw / 2);
+        c.lineTo(-aw, aw / 2);
+        c.closePath();
+        c.fill();
+        c.stroke();
+
+        body.render.sprite = { texture: cv.toDataURL(), xScale: 1, yScale: 1 };
+    } catch (e) {
+        // fallback: keep solid color
+    }
+
+    World.add(world, body);
+    return body;
+}
+
 function createRightTriangle4(x, y, base = 45, height = 45, opts = { isStatic: true }) {
     const equalize = -20;
     const verts = [
@@ -675,7 +816,22 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
             }
         }
 
-        let pointBody = null;
+            // boost pads
+            let boostBody = null;
+            if (pair.bodyA.label === 'ball' && pair.bodyB.label === 'boost') {
+                boostBody = pair.bodyB;
+            } else if (pair.bodyB.label === 'ball' && pair.bodyA.label === 'boost') {
+                boostBody = pair.bodyA;
+            }
+
+            if (boostBody) {
+                const power = (boostBody.boostPower !== undefined) ? boostBody.boostPower : 20;
+                const dir = boostBody.boostDir || { x: 1, y: 0 };
+                Body.setVelocity(ball, { x: dir.x * power, y: dir.y * power });
+            }
+
+            //points
+            let pointBody = null;
         if (pair.bodyA.label === 'point' && pair.bodyB.label === 'ball') {
             pointBody = pair.bodyA;
         } 
@@ -696,6 +852,47 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
         }
     }
 });
+/*
+createMoving([
+    { X:450, Y:300 },
+    { X:450, Y:500}
+], 200, 300, 45, 45);
+createMoving([
+    { X:400, Y:300 },
+    { X:400, Y:500 }
+], 200, 250, 45, 45);
+createMoving([
+    { X:350, Y:300 },
+    { X:350, Y:500}
+], 200, 200, 45, 45);
+createMoving([
+    { X:300, Y:300 },
+    { X:300, Y:500}
+], 200, 150, 45, 45);
+createMoving([
+    { X:250, Y:300 },
+    { X:250, Y:500}
+], 200, 100, 45, 45);
+createMoving([
+    { X:200, Y:300 },
+    { X:200, Y:500}
+], 200, 50, 45, 45);
+createMoving([
+    { X:150, Y:300 },
+    { X:150, Y:500}
+], 200, 0, 45, 45);*/
+
+/*
+createMoving([
+    { X:350, Y:200 },
+    { X:350, Y:375}
+], 50, 0, 450, 45);
+createMoving([
+    { X:350, Y:600},
+    { X:350, Y:425 }
+], 50, 0, 450, 45);
+
+createBoost(135, 450, 'up', 20);*/
 
 // create an overlay canvas for the aim line
 const gameContainerEl = gameContainer;
@@ -1054,7 +1251,7 @@ function loadLevel(where) {
         lvlIndicatorWorld.style.animation = "rainbowColor 2s";
     }, 1200);
 
-    setTimeout(() => { // happends as the black screeen is covering everytihng
+    setTimeout(() => {  // happends as the black screeen is covering everytihng
 
         //remove old level
         oldLevelArray.forEach(body => {
@@ -1082,7 +1279,7 @@ function loadLevel(where) {
 
         //level name
         const thisLevelObj = getLevelObject(worldIndex, levelIndex);
-        let levelName = "Unknown";
+        let levelName = "Unnamed Level";
         if (thisLevelObj && thisLevelObj.name) { // check if there even is a name
             levelName = thisLevelObj.name;
         }
