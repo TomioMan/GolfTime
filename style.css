@@ -114,11 +114,22 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 280px;
+    max-width: 280px;
+    overflow: hidden;
+    white-space: nowrap;
     margin-top: 10px;
     font-family: comic sans ms, sans-serif;
     color: white;
     font-size: 30px;
     z-index: 7;
+}
+.level_indicator p {
+    margin: 0;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
 }
 @keyframes loadAnimation {
     0% {opacity: 0;}

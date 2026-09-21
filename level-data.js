@@ -14,6 +14,30 @@ window.levels = [
         },
 
         {
+            name: "Trigger Demo",
+            ballStartX: 112.5,
+            ballStartY: 427.5,
+            Sscore: 20,
+            layout: [
+                Matter.Bodies.circle(787.5, 427.5, 16, { label: 'hole', isStatic: true, render: { fillStyle: '#000000' }})
+            ],
+            functionsToTrigger: [
+                function () {
+                    createMoving([
+                        { X: 360, Y: 180 },
+                        { X: 540, Y: 180 },
+                        { X: 540, Y: 360 },
+                        { X: 360, Y: 360 }
+                    ], 90, 250, 90, 16);
+
+                    createBoost(170, 180, 'right', 20);
+                    createBoost(180, 360, 'up'   , 8);
+                    createBoost(770, 180, 'down' , 8);
+                }
+            ]
+        },
+
+        {
             name: "Up 'n Over",
             ballStartX: 157.5,
             ballStartY: 787.5,

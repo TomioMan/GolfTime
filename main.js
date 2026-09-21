@@ -288,6 +288,25 @@ const lvlIndicatorLevel = document.getElementById("levelIndicatorLevel");
 const lvlIndicatorWorld = document.getElementById("levelIndicatorWorld");
 const lvlIndicatorName = document.getElementById("levelIndicatorName");
 
+const LEVEL_INDICATOR_MAX_WIDTH = 280;
+const LEVEL_INDICATOR_MIN_FONT_SIZE = 16;
+
+function fitLevelIndicator() {
+    const indicator = document.getElementById("levelIndicator");
+    if (!indicator) return;
+
+    const textNode = indicator.querySelector("p");
+    if (!textNode) return;
+
+    let fontSize = 30;
+    indicator.style.fontSize = `${fontSize}px`;
+
+    while (textNode.scrollWidth > indicator.clientWidth && fontSize > LEVEL_INDICATOR_MIN_FONT_SIZE) {
+        fontSize -= 1;
+        indicator.style.fontSize = `${fontSize}px`;
+    }
+}
+
 startTransition()
 
 function startTransition() {
@@ -599,8 +618,26 @@ function playGifAtPosition(worldX, worldY, gifSrc = 'media/gifs/destroy-box.gif'
     }, duration);
 }
 
-// moving platforms support
+// Arrays for function-loaded objects
 const movingPlatforms = [];
+const boostPads = [];
+const triggeredLevelBodies = [];
+
+function registerLevelBody(body) {
+    if (!body) return body;
+    if (triggeredLevelBodies.indexOf(body) === -1) {
+        triggeredLevelBodies.push(body);
+    }
+    return body;
+}
+
+function clearTriggeredLevelBodies() {
+    for (const body of triggeredLevelBodies.splice(0)) {
+        if (body) {
+            World.remove(world, body);
+        }
+    }
+}
 
 function createMoving(pointsArray = [], speed = 100, waitMs = 500, w = 90, h = 16) {
     if (!Array.isArray(pointsArray) || pointsArray.length === 0) return null;
@@ -616,6 +653,7 @@ function createMoving(pointsArray = [], speed = 100, waitMs = 500, w = 90, h = 1
     });
 
     World.add(world, body);
+
 
     const meta = {
         body,
@@ -676,23 +714,47 @@ Matter.Events.on(engine, 'beforeUpdate', function() {
     }
 });
 
-// create a boost pad
-//unfuncioning for now, will fix later...?
-function createBoost(x, y, direction = 'right', power = 20) {
-    const w = 45;
-    const h = 45;
-    const centerX = x + w / 2;
-    const centerY = y + h / 2;
+function createBoost(x, y, direction, power = 20) {
 
-    const body = Bodies.rectangle(centerX, centerY, w, h, {
+    const equalize = -20;
+    let verts;
+    if (direction === 'up') {
+        verts = [
+        { x: equalize + 45, y: equalize + 45 },
+        { x: equalize + 22.5, y: equalize },
+        { x: equalize, y: equalize + 45 }
+        ];
+    } else if (direction === 'down') {
+        verts = [
+        { x: equalize, y: equalize },
+        { x: equalize + 22.5, y: equalize + 45 },
+        { x: equalize + 45, y: equalize }
+        ];
+    } else if (direction === 'left') {
+        verts = [
+        { x: equalize + 45, y: equalize },
+        { x: equalize, y: equalize + 22.5 },
+        { x: equalize + 45, y: equalize + 45 }
+        ];
+    } else if (direction === 'right') {
+        verts = [
+        { x: equalize, y: equalize },
+        { x: equalize + 45, y: equalize + 22.5 },
+        { x: equalize, y: equalize + 45 }
+        ];
+    }
+    
+    const body = Bodies.fromVertices(x + 16, y + 16, verts, {
         isStatic: true,
+        isSensor: true,
         label: 'boost',
         render: { fillStyle: '#ffee00' }
     });
 
     // direction vector
-    let dir = { x: 1, y: 0 };
+    let dir = { x: 0, y: 0 };
     if (direction === 'left') dir = { x: -1, y: 0 };
+    else if (direction === 'right') dir = { x: 1, y: 0 };
     else if (direction === 'up') dir = { x: 0, y: -1 };
     else if (direction === 'down') dir = { x: 0, y: 1 };
     else if (typeof direction === 'number') dir = { x: Math.cos(direction), y: Math.sin(direction) };
@@ -700,43 +762,9 @@ function createBoost(x, y, direction = 'right', power = 20) {
     body.boostDir = dir;
     body.boostPower = Number(power) || 20;
 
-    // draw arrow texture on a canvas and use as sprite
-    try {
-        const cv = document.createElement('canvas');
-        cv.width = w;
-        cv.height = h;
-        const c = cv.getContext('2d');
-        c.clearRect(0, 0, w, h);
-        c.translate(w / 2, h / 2);
-        let angle = 0;
-        if (direction === 'down') angle = Math.PI / 2;
-        else if (direction === 'left') angle = Math.PI;
-        else if (direction === 'up') angle = -Math.PI / 2;
-        c.rotate(angle);
-
-        // arrow body
-        c.fillStyle = '#ffea55';
-        c.strokeStyle = '#000000';
-        c.lineWidth = 2;
-        const aw = Math.min(w, h) * 0.35;
-        c.beginPath();
-        c.moveTo(-aw, -aw / 2);
-        c.lineTo(0, -aw / 2);
-        c.lineTo(0, -aw);
-        c.lineTo(aw, 0);
-        c.lineTo(0, aw);
-        c.lineTo(0, aw / 2);
-        c.lineTo(-aw, aw / 2);
-        c.closePath();
-        c.fill();
-        c.stroke();
-
-        body.render.sprite = { texture: cv.toDataURL(), xScale: 1, yScale: 1 };
-    } catch (e) {
-        // fallback: keep solid color
-    }
-
     World.add(world, body);
+    boostPads.push(body);
+    registerLevelBody(body);
     return body;
 }
 
@@ -816,22 +844,25 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
             }
         }
 
-            // boost pads
-            let boostBody = null;
-            if (pair.bodyA.label === 'ball' && pair.bodyB.label === 'boost') {
-                boostBody = pair.bodyB;
-            } else if (pair.bodyB.label === 'ball' && pair.bodyA.label === 'boost') {
-                boostBody = pair.bodyA;
-            }
+        // boost pads
+        let boostBody = null;
+        if (pair.bodyA.label === 'ball' && pair.bodyB.label === 'boost') {
+            boostBody = pair.bodyB;
+        } else if (pair.bodyB.label === 'ball' && pair.bodyA.label === 'boost') {
+            boostBody = pair.bodyA;
+        }
 
-            if (boostBody) {
-                const power = (boostBody.boostPower !== undefined) ? boostBody.boostPower : 20;
-                const dir = boostBody.boostDir || { x: 1, y: 0 };
-                Body.setVelocity(ball, { x: dir.x * power, y: dir.y * power });
-            }
+        if (boostBody) {
+            const power = (boostBody.boostPower !== undefined) ? boostBody.boostPower : 20;
+            const dir = boostBody.boostDir || { x: 1, y: 0 };
+            const padCenterX = boostBody.position.x;
+            const padCenterY = boostBody.position.y;
+            Body.setPosition(ball, { x: padCenterX, y: padCenterY });
+            Body.setVelocity(ball, { x: dir.x * power, y: dir.y * power });
+        }
 
-            //points
-            let pointBody = null;
+        //points
+        let pointBody = null;
         if (pair.bodyA.label === 'point' && pair.bodyB.label === 'ball') {
             pointBody = pair.bodyA;
         } 
@@ -852,47 +883,6 @@ Matter.Events.on(engine, 'collisionStart', function(event) {
         }
     }
 });
-/*
-createMoving([
-    { X:450, Y:300 },
-    { X:450, Y:500}
-], 200, 300, 45, 45);
-createMoving([
-    { X:400, Y:300 },
-    { X:400, Y:500 }
-], 200, 250, 45, 45);
-createMoving([
-    { X:350, Y:300 },
-    { X:350, Y:500}
-], 200, 200, 45, 45);
-createMoving([
-    { X:300, Y:300 },
-    { X:300, Y:500}
-], 200, 150, 45, 45);
-createMoving([
-    { X:250, Y:300 },
-    { X:250, Y:500}
-], 200, 100, 45, 45);
-createMoving([
-    { X:200, Y:300 },
-    { X:200, Y:500}
-], 200, 50, 45, 45);
-createMoving([
-    { X:150, Y:300 },
-    { X:150, Y:500}
-], 200, 0, 45, 45);*/
-
-/*
-createMoving([
-    { X:350, Y:200 },
-    { X:350, Y:375}
-], 50, 0, 450, 45);
-createMoving([
-    { X:350, Y:600},
-    { X:350, Y:425 }
-], 50, 0, 450, 45);
-
-createBoost(135, 450, 'up', 20);*/
 
 // create an overlay canvas for the aim line
 const gameContainerEl = gameContainer;
@@ -1018,7 +1008,7 @@ function getLevelObject(worldIndex, levelIndex) {
     return levels[worldIndex][levelIndex];
 }
 
-function grabLevel(worldIndex, levelIndex) {
+function grabLevel(worldIndex, levelIndex) { //takes the layout of the level.
     const levels = window.levels || [];
     if (!levels[worldIndex] || !levels[worldIndex][levelIndex]) {
         console.log("Level doesn't exist!");
@@ -1062,6 +1052,23 @@ function grabLevelBallStartY(worldIndex, levelIndex) {
     return levelObj.ballStartY || null;
 }
 
+// added for moving platforms and other level-specific functions
+function triggerLevelFunctions(levelObj) {
+    if (!levelObj || !levelObj.functionsToTrigger) return;
+
+    const triggers = Array.isArray(levelObj.functionsToTrigger)
+        ? levelObj.functionsToTrigger
+        : [levelObj.functionsToTrigger];
+
+    for (const trigger of triggers) {
+        if (typeof trigger === 'function') {
+            trigger();
+        } else if (typeof trigger === 'string' && typeof window[trigger] === 'function') {
+            window[trigger]();
+        }
+    }
+}
+
 function getBodyByLabel(world, label) {
     const all = Matter.Composite.allBodies(world);
     for (const body of all) {
@@ -1095,6 +1102,7 @@ if (thisLevelObj && thisLevelObj.name) { // check if there even is a name
     firstLevelName = thisLevelObj.name;
 }
 lvlIndicatorName.textContent = firstLevelName;
+fitLevelIndicator();
 teleportByLabel(world, "ball", firstBallCordX, firstBallCordY)
 if (levelIndex < 8) {
     lvlIndicatorLevel.textContent = `0${levelIndex + 1}`;
@@ -1251,12 +1259,30 @@ function loadLevel(where) {
         lvlIndicatorWorld.style.animation = "rainbowColor 2s";
     }, 1200);
 
-    setTimeout(() => {  // happends as the black screeen is covering everytihng
+    // happends as the black screeen is covering everytihng
+    setTimeout(() => {  
 
-        //remove old level
+        // remove old level bodies
         oldLevelArray.forEach(body => {
             World.remove(world, body);
         });
+
+        // remove moving platforms from the world and clear their tracking data
+        for (const moving of movingPlatforms.splice(0)) {
+            if (moving && moving.body) {
+                World.remove(world, moving.body);
+            }
+        }
+
+        // remove boost pads from the world and clear their tracking data
+        for (const boostPad of boostPads.splice(0)) {
+            if (boostPad) {
+                World.remove(world, boostPad);
+            }
+        }
+
+        // remove any bodies created by level-triggered functions
+        clearTriggeredLevelBodies();
  
         // now load new level
         levelArray = grabLevel(worldIndex, levelIndex);
@@ -1266,6 +1292,7 @@ function loadLevel(where) {
 
         // add new stuff
         World.add(world, levelArray);
+        triggerLevelFunctions(getLevelObject(worldIndex, levelIndex));
 
         let newBallX = grabLevelBallStartX(worldIndex, levelIndex);
         let newBallY = grabLevelBallStartY(worldIndex, levelIndex);
@@ -1285,6 +1312,7 @@ function loadLevel(where) {
         }
 
         lvlIndicatorName.textContent = levelName;
+        fitLevelIndicator();
 
         
         // make it render the ball again.
@@ -1355,6 +1383,7 @@ function gradeLevel(worldIndex, levelIndex) {
         Sscore = thisLevelObj.Sscore;
     }
 
+    // sound effects
     const slot1 = new Audio('media/sounds/slot-machine-1.mp3');
     slot1.volume = 0.7;
     const slot2 = new Audio('media/sounds/slot-machine-2.mp3');
@@ -1373,7 +1402,7 @@ function gradeLevel(worldIndex, levelIndex) {
     const gradeSfxF = new Audio('media/sounds/grade-sfx-f.mp3');
     gradeSfxF.volume = 0.2;
 
-    setTimeout(()=>{ //first input
+    setTimeout(()=>{ // first input
         slot1.play();
     },700)
     setTimeout(() => {
@@ -1393,7 +1422,7 @@ function gradeLevel(worldIndex, levelIndex) {
             },200)
         }, 800);
     }, 1000);
-    setTimeout(()=>{ //sound effect based on grade
+    setTimeout(()=>{ // sound effect based on grade
         if (gradeFinal <= Sscore) {
             gradeImage.style.transform = `scale(1.1)`
             setTimeout(() => {
