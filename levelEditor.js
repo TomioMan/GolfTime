@@ -14,6 +14,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const exportButton = document.getElementById('exportButton');
     const tableButtons = document.querySelectorAll('.game table button');
 
+    const movingPlatformMenu = document.getElementById("moving-platform-menu")
+    
+    function closeMovingPlatformMenu() {
+        movingPlatformMenu.classList.remove('visible');
+    }
+
+    movingPlatformMenu.querySelectorAll('button .closeButton').forEach(btn => {
+        btn.addEventListener('click', () => {
+            closeMovingPlatformMenu();
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!movingPlatformMenu.contains(event.target) && !event.target.closest('.movingPlatform')) {
+            closeMovingPlatformMenu();
+        }
+    });
+
     // all the blovks 
     // order = cycle order
     const sprites = [
@@ -26,7 +44,8 @@ document.addEventListener('DOMContentLoaded', function () {
         'point', 
         'ball', 
         'descructive', 
-        'hole'
+        'hole',
+        'movingPlatform'
     ];
 
     function getButtonSprite(btn) {
@@ -47,7 +66,18 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.dataset.num = index + 1;
         if (!btn.dataset.prev) btn.dataset.prev = getButtonSprite(btn);
 
+        btn.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            if (!btn.classList.contains('movingPlatform')) return;
+
+            movingPlatformMenu.classList.add('visible');
+        });
+
         btn.addEventListener('mousedown', function (e) {
+            if (e.button !== 0) {
+                return;
+            }
+
             e.preventDefault();
 
             //ctrl click - back to default
