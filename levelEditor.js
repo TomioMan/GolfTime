@@ -1,4 +1,33 @@
-// ...existing code...
+const gameField = document.getElementById('game');
+const movingPlatformMenu = document.getElementById("moving-platform-menu")
+
+if (gameField) {
+    let game_tableHtml = "<table>";
+
+    for (let row = 0; row < 20; row++) {
+        let rowHtml = "<tr>";
+
+        for (let col = 0; col < 20; col++) {
+            rowHtml += `<td><button class="empty" data-row="${row}" data-col="${col}"></button></td>`;
+        }
+
+        rowHtml += "</tr>";
+        game_tableHtml += rowHtml;
+    }
+
+    game_tableHtml += "</table>";
+    gameField.innerHTML = game_tableHtml;
+}
+
+function openMovingPlatformMenu() {
+    movingPlatformMenu.classList.add('visible');
+}
+function closeMovingPlatformMenu() {
+    movingPlatformMenu.classList.remove('visible');
+}
+
+
+
 let bodyClicked = false;
 document.body.addEventListener('mousedown', function () {
     if (!bodyClicked) {
@@ -11,26 +40,9 @@ document.body.addEventListener('mousedown', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+
     const exportButton = document.getElementById('exportButton');
     const tableButtons = document.querySelectorAll('.game table button');
-
-    const movingPlatformMenu = document.getElementById("moving-platform-menu")
-    
-    function closeMovingPlatformMenu() {
-        movingPlatformMenu.classList.remove('visible');
-    }
-
-    movingPlatformMenu.querySelectorAll('button .closeButton').forEach(btn => {
-        btn.addEventListener('click', () => {
-            closeMovingPlatformMenu();
-        });
-    });
-
-    document.addEventListener('click', (event) => {
-        if (!movingPlatformMenu.contains(event.target) && !event.target.closest('.movingPlatform')) {
-            closeMovingPlatformMenu();
-        }
-    });
 
     // all the blovks 
     // order = cycle order
@@ -70,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             if (!btn.classList.contains('movingPlatform')) return;
 
-            movingPlatformMenu.classList.add('visible');
+            openMovingPlatformMenu();
         });
 
         btn.addEventListener('mousedown', function (e) {
@@ -103,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Export: find all buttons with class "squere" and log their numbers (1-based)
+    // Export: find all buttons with a class in the sprites array, and log their numbers (1-based)
     exportButton.addEventListener('click', function () {
         const pressed = [];
         const finalPositions = [];
@@ -210,3 +222,121 @@ document.getElementById("copyButton").addEventListener("click", () => {
     const Output = document.getElementById("Output").textContent;
     navigator.clipboard.writeText(Output)
 });
+
+
+
+// Moving platform menu
+document.addEventListener('DOMContentLoaded', function () {
+
+    document.getElementById("closeButton").addEventListener('click', ()=>{
+        closeMovingPlatformMenu();
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!movingPlatformMenu.contains(event.target) && !event.target.closest('.movingPlatform')) {
+            closeMovingPlatformMenu();
+        }
+    });
+});
+
+
+const movingPlatformTable = document.getElementById("moving-platform-table");
+const mPT_cols = 20;
+const mPT_rows = 20;
+let tableHtml = "";
+
+for (let row = 0; row < mPT_rows; row++) {
+    let rowHtml = "<tr>";
+
+    for (let col = 0; col < mPT_cols; col++) {
+        rowHtml += `<td><button data-row="${row}" data-col="${col}" data-place="0"></button></td>`;
+    }
+
+    rowHtml += "</tr>";
+    tableHtml += rowHtml;
+}
+
+movingPlatformTable.innerHTML = tableHtml;
+
+const setMovingPlatformButtonDisplay = (btn) => {
+    const place = Number(btn.dataset.place) || 0;
+    btn.dataset.place = String(place);
+    btn.innerHTML = place > 0 ? String(place) : "";
+};
+
+const getActiveMovingPlatformButtons = () => {
+    return Array.from(movingPlatformTable.querySelectorAll('button')).filter((btn) => {
+        return Number(btn.dataset.place) > 0;
+    }).sort((a, b) => Number(a.dataset.place) - Number(b.dataset.place));
+};
+
+const compactMovingPlatformPlaces = () => {
+    const active = getActiveMovingPlatformButtons();
+    active.forEach((btn, index) => {
+        btn.dataset.place = String(index + 1);
+        setMovingPlatformButtonDisplay(btn);
+    });
+};
+
+const triggerMovingPlatformButton = (button) => {
+    if (!button) return null;
+
+    const currentPlace = Number(button.dataset.place) || 0;
+    const activeButtons = getActiveMovingPlatformButtons();
+
+    if (currentPlace > 0) {
+        button.dataset.place = '0';
+        setMovingPlatformButtonDisplay(button);
+
+        activeButtons
+            .filter((btn) => btn !== button && Number(btn.dataset.place) > currentPlace)
+            .forEach((btn) => {
+                btn.dataset.place = String(Number(btn.dataset.place) - 1);
+                setMovingPlatformButtonDisplay(btn);
+            });
+
+        return button;
+    }
+
+    const nextPlace = activeButtons.length > 0
+        ? Math.max(...activeButtons.map((btn) => Number(btn.dataset.place))) + 1
+        : 1;
+
+    button.dataset.place = String(nextPlace);
+    setMovingPlatformButtonDisplay(button);
+
+    return button;
+};
+
+const getMovingPlatformButtonAt = (row, col) => {
+    return movingPlatformTable.querySelector(`button[data-row="${row}"][data-col="${col}"]`);
+};
+
+const clickMovingPlatformCell = (row, col) => {
+    const button = getMovingPlatformButtonAt(row, col);
+    return triggerMovingPlatformButton(button);
+};
+
+movingPlatformTable.addEventListener('click', (event) => {
+    const button = event.target.closest('button');
+    triggerMovingPlatformButton(button);
+});
+
+if (gameField) { // console logging the clicked tile
+    gameField.addEventListener('click', (event) => {
+        const button = event.target.closest('button');
+        if (!button) return;
+
+        const row = Number(button.dataset.row);
+        const col = Number(button.dataset.col);
+
+        if (Number.isNaN(row) || Number.isNaN(col)) return;
+
+        console.log(`Game field button clicked at row ${row}, col ${col}`);
+    });
+}
+
+movingPlatformTable.querySelectorAll('button').forEach((btn) => {
+    setMovingPlatformButtonDisplay(btn);
+});
+
