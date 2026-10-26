@@ -1,3 +1,8 @@
+:root{
+    --bg-color: rgba(255, 255, 255, 0.4);
+    --solid-color: #27272c;
+}
+
 
 table {
   border-collapse: collapse;
@@ -12,9 +17,9 @@ td {
     cursor: pointer;
     width: 45px;
     height: 41px;
-    transform: translateY(2px) scaleY(1.09);
+    transform: translateY(1px) scaleX(0.97) scaleY(1.08);
     border: none;
-    background-color: #ffffff81;
+    background-color: var(--bg-color);
 }
 .squere {
     border: none;
@@ -22,7 +27,7 @@ td {
     height: 41px;
     transform: translateY(2px) scaleY(1.1);
     cursor: pointer;
-    background-color: #777;
+    background-color: var(--solid-color);
 }
 .triangle-1, .triangle-2, .triangle-3, .triangle-4 {
     border: none;
@@ -32,20 +37,20 @@ td {
     cursor: pointer;
 }
 .triangle-1{
-    background: #ffffff;
-    background: linear-gradient(43deg,#ffffff81 49%, #777 50%);
+    background: var(--bg-color);
+    background: linear-gradient(43deg,var(--bg-color) 49%, var(--solid-color) 50%);
 }
 .triangle-2{
-    background: #ffffff;
-    background: linear-gradient(calc(47deg + 90deg),#ffffff81 49%, #777 50%);
+    background: var(--bg-color);
+    background: linear-gradient(calc(47deg + 90deg),var(--bg-color) 49%, var(--solid-color) 50%);
 }
 .triangle-3{
-    background: #ffffff;
-    background: linear-gradient(calc(43deg + 180deg),#ffffff81 49%, #777 50%);
+    background: var(--bg-color);
+    background: linear-gradient(calc(43deg + 180deg),var(--bg-color) 49%, var(--solid-color) 50%);
 }
 .triangle-4{
-    background: #ffffff;
-    background: linear-gradient(calc(47deg + 270deg),#ffffff81 49%, #777 50%);
+    background: var(--bg-color);
+    background: linear-gradient(calc(47deg + 270deg),var(--bg-color) 49%, var(--solid-color) 50%);
 }
 .point {
     border: none;
@@ -54,7 +59,7 @@ td {
     transform: translateY(2px) scaleY(1.1);
     cursor: pointer;
     background: #ffffff;
-    background: radial-gradient(circle,#00ff44 25%, #ffffff81 30%);
+    background: radial-gradient(circle,#00ff44 25%, var(--bg-color) 30%);
 }
 .ball {
     border: none;
@@ -63,7 +68,7 @@ td {
     transform: translateY(2px) scaleY(1.1);
     cursor: pointer;
     background: #ffffff;
-    background: radial-gradient(circle,#ffffff 55%, #ffffff81 60%);
+    background: radial-gradient(circle,#ffffff 55%, var(--bg-color) 60%);
 }
 .descructive {
     border: none;
@@ -80,7 +85,7 @@ td {
     transform: translateY(2px) scaleY(1.1);
     cursor: pointer;
     background: #ffffff;
-    background: radial-gradient(circle,#000000 55%, #ffffff81 60%);
+    background: radial-gradient(circle,#000000 55%, var(--bg-color) 60%);
 }
 .movingPlatform{
     position: relative;
@@ -89,7 +94,7 @@ td {
     height: 41px;
     transform: translateY(2px) scaleY(1.1);
     cursor: pointer;
-    background: linear-gradient(135deg, #ffffff81, #ffffff81);
+    background: linear-gradient(135deg, var(--bg-color), var(--bg-color));
     overflow: hidden;
 }
 .movingPlatform::before {

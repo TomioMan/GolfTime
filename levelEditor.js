@@ -1,5 +1,6 @@
 const gameField = document.getElementById('game');
 const movingPlatformMenu = document.getElementById("moving-platform-menu")
+let activeMovingPlatformOriginCell = null;
 
 if (gameField) {
     let game_tableHtml = "<table>";
@@ -19,11 +20,15 @@ if (gameField) {
     gameField.innerHTML = game_tableHtml;
 }
 
-function openMovingPlatformMenu() {
+function openMovingPlatformMenu( startRow, StartCol) {
     movingPlatformMenu.classList.add('visible');
+    clickMovingPlatformCell(startRow, StartCol)
 }
 function closeMovingPlatformMenu() {
+    saveMovingPlatformDataToMainCell();
+    wipeMovingPlatformMenu();
     movingPlatformMenu.classList.remove('visible');
+    activeMovingPlatformOriginCell = null;
 }
 
 
@@ -78,11 +83,19 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.dataset.num = index + 1;
         if (!btn.dataset.prev) btn.dataset.prev = getButtonSprite(btn);
 
-        btn.addEventListener('contextmenu', function (e) {
+        btn.addEventListener('contextmenu', function (e) { // right clicking
             e.preventDefault();
             if (!btn.classList.contains('movingPlatform')) return;
 
-            openMovingPlatformMenu();
+            const button = e.target.closest('button');
+
+            const row = Number(button.dataset.row);
+            const col = Number(button.dataset.col);
+
+            console.log(`Game field button clicked at row ${row}, col ${col}`);
+
+            activeMovingPlatformOriginCell = button;
+            openMovingPlatformMenu(row, col);
         });
 
         btn.addEventListener('mousedown', function (e) {
@@ -117,92 +130,112 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Export: find all buttons with a class in the sprites array, and log their numbers (1-based)
     exportButton.addEventListener('click', function () {
-        const pressed = [];
         const finalPositions = [];
-
+        const finalFunctions = [];
         const cols = 20;
         const cellSize = 45;
-        
+        let ballStartX = null;
+        let ballStartY = null;
+
         for (let i = 0; i < tableButtons.length; i++) {
             const btn = tableButtons[i];
             if (btn.classList.contains('squere')) {
-                pressed.push(i + 1);
                 const x = (i % cols) * cellSize + 22.5;
                 const y = Math.floor(i / cols) * cellSize + 22.5;
                 finalPositions.push(`Matter.Bodies.rectangle(${x}, ${y}, ${cellSize + 0.5}, ${cellSize + 0.5}, { isStatic: true, render: { fillStyle: '#131313' }}),`);
             }
 
             if (btn.classList.contains('triangle-1')) {
-                pressed.push(i + 1);
                 const x = ((i % cols) * cellSize) + 31;
                 const y = (Math.floor(i / cols) * cellSize) + 15;
                 finalPositions.push(`Matter.Bodies.fromVertices(${x}, ${y}, [{ x: -20 + 45, y: -20 }, { x: -20, y: -20 }, { x: -20 + 45, y: -20 + 45 }], {label: 'triangle', isStatic: true, render: { fillStyle: '#131313' }}),`);
             }
 
             if (btn.classList.contains('triangle-2')) {
-                pressed.push(i + 1);
                 const x = ((i % cols) * cellSize) + 31;
                 const y = (Math.floor(i / cols) * cellSize) + 31;
                 finalPositions.push(`Matter.Bodies.fromVertices(${x}, ${y}, [{x: -20 + 45, y: -20 + 45}, {x: -20, y: -20 + 45}, {x: -20 + 45, y: -20}], {label: 'triangle', isStatic: true, render: { fillStyle: '#131313' }}),`);
             }
 
             if (btn.classList.contains('triangle-3')) {
-                pressed.push(i + 1);
                 const x = ((i % cols) * cellSize) + 15;
                 const y = (Math.floor(i / cols) * cellSize) + 31;
                 finalPositions.push(`Matter.Bodies.fromVertices(${x}, ${y}, [{x: -20, y: -20 + 45}, {x: -20 + 45, y: -20 + 45}, {x: -20, y: -20}], {label: 'triangle', isStatic: true, render: { fillStyle: '#131313' }}),`);
             }
 
             if (btn.classList.contains('triangle-4')) {
-                pressed.push(i + 1);
                 const x = ((i % cols) * cellSize) + 15;
                 const y = (Math.floor(i / cols) * cellSize) + 15;
                 finalPositions.push(`Matter.Bodies.fromVertices(${x}, ${y}, [{x: -20, y: -20}, {x: -20 + 45, y: -20}, {x: -20, y: -20 + 45}], {label: 'triangle', isStatic: true, render: { fillStyle: '#131313' }}),`);
             }
 
             if (btn.classList.contains('ball')) {
-                pressed.push(i + 1);
                 const x = (i % cols) * cellSize + 22.5;
                 const y = Math.floor(i / cols) * cellSize + 22.5;
-                const OutputBall = document.getElementById("OutputBall");
-                OutputBall.innerHTML = ` ballStartX: ${x}, <br> ballStartY: ${y},`
+                ballStartX = x;
+                ballStartY = y;
             }
 
             if (btn.classList.contains('point')) {
-                pressed.push(i + 1);
                 const x = ((i % cols) * cellSize) + 22.5;
                 const y = (Math.floor(i / cols) * cellSize) + 22.5;
                 finalPositions.push(`Matter.Bodies.circle(${x}, ${y}, 10, { label: 'point', isSensor: true, isStatic: true, render: { fillStyle: '#ffee00ff' }}),`);
             }
 
             if (btn.classList.contains("descructive")) {
-                pressed.push(i + 1);
                 const x = ((i % cols) * cellSize) + 22.5;
                 const y = (Math.floor(i / cols) * cellSize) + 22.5;
                 finalPositions.push(`Matter.Bodies.rectangle(${x}, ${y}, 45, 45, { label: 'destructible', render: { fillStyle: '#7c0b0bff' }, isDestructible: true, isStatic: true}),`);
             }
 
             if (btn.classList.contains("hole")) {
-                pressed.push(i + 1);
                 const x = (i % cols) * cellSize + 22.5;
                 const y = Math.floor(i / cols) * cellSize + 22.5;
                 finalPositions.push(`Matter.Bodies.circle(${x}, ${y}, 16, { label: 'hole', isStatic: true, render: { fillStyle: '#000000' }}),`);
             }
+
+            if (btn.classList.contains("movingPlatform")) {
+                const movingPlatformFunction = getMovingPlatformCreateCallFromCell(btn);
+                if (movingPlatformFunction) {
+                    finalFunctions.push(movingPlatformFunction);
+                }
+            }
         }
-        
-        if (pressed.length === 0) {
-            console.log("No buttons pressed.");
+
+        if (finalPositions.length === 0 && finalFunctions.length === 0) {
+            console.log("No level content to export.");
             return;
         }
 
+        const formattedFunctions = finalFunctions.length
+            ? finalFunctions.map((fn) => `        function () {\n            ${fn.replace(/\n/g, '\n            ')}\n        }`) 
+            : [];
+
+        const outputLines = [
+            '{',
+            '    name: "PLACEHOLDER",',
+            `    ballStartX: ${ballStartX ?? 112.5},`,
+            `    ballStartY: ${ballStartY ?? 427.5},`,
+            '    Sscore: 999,',
+            '    layout: [',
+            ...finalPositions.map((entry) => `        ${entry}`),
+            '    ],',
+            '    functionsToTrigger: ['
+        ];
+
+        if (formattedFunctions.length > 0) {
+            outputLines.push(...formattedFunctions);
+        }
+
+        outputLines.push('    ]');
+        outputLines.push('}');
+
         const Output = document.getElementById("Output");
-        const outText = finalPositions.join("\n");
+        const outText = outputLines.join("\n");
+
         if (Output) {
-            if ('value' in Output) {
-                Output.value = outText;
-            } else {
-                Output.textContent = outText;
-            }
+            Output.textContent = outText;
+            console.log(outText);
             if (typeof Output.select === 'function') {
                 Output.select();
             }
@@ -212,17 +245,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-//ease of use things!
-document.getElementById("copyButtonBall").addEventListener("click", () => {
-    const OutputBall = document.getElementById("OutputBall").textContent;
-    navigator.clipboard.writeText(OutputBall)
-});
-
+// copy area
 document.getElementById("copyButton").addEventListener("click", () => {
     const Output = document.getElementById("Output").textContent;
     navigator.clipboard.writeText(Output)
 });
-
 
 
 // Moving platform menu
@@ -239,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
+// generate platform menu grid
 const movingPlatformTable = document.getElementById("moving-platform-table");
 const mPT_cols = 20;
 const mPT_rows = 20;
@@ -247,17 +274,15 @@ let tableHtml = "";
 
 for (let row = 0; row < mPT_rows; row++) {
     let rowHtml = "<tr>";
-
     for (let col = 0; col < mPT_cols; col++) {
         rowHtml += `<td><button data-row="${row}" data-col="${col}" data-place="0"></button></td>`;
     }
-
     rowHtml += "</tr>";
     tableHtml += rowHtml;
 }
-
 movingPlatformTable.innerHTML = tableHtml;
 
+//setting order in which platform goes and auto-incrementing
 const setMovingPlatformButtonDisplay = (btn) => {
     const place = Number(btn.dataset.place) || 0;
     btn.dataset.place = String(place);
@@ -284,6 +309,10 @@ const triggerMovingPlatformButton = (button) => {
     const currentPlace = Number(button.dataset.place) || 0;
     const activeButtons = getActiveMovingPlatformButtons();
 
+    if (currentPlace === 1) {  // if the number is one, don't change it
+        return button;
+    }
+
     if (currentPlace > 0) {
         button.dataset.place = '0';
         setMovingPlatformButtonDisplay(button);
@@ -305,6 +334,11 @@ const triggerMovingPlatformButton = (button) => {
     button.dataset.place = String(nextPlace);
     setMovingPlatformButtonDisplay(button);
 
+    if (nextPlace === 1) { // if the number is one, don't change it
+        button.dataset.place = '1';
+        setMovingPlatformButtonDisplay(button);
+    }
+
     return button;
 };
 
@@ -312,7 +346,108 @@ const getMovingPlatformButtonAt = (row, col) => {
     return movingPlatformTable.querySelector(`button[data-row="${row}"][data-col="${col}"]`);
 };
 
+const getMainGridButtonAt = (row, col) => {
+    return document.querySelector(`.game button[data-row="${row}"][data-col="${col}"]`);
+};
+
+const wipeMovingPlatformMenu = () => {
+    movingPlatformTable.querySelectorAll('button').forEach((btn) => {
+        btn.dataset.place = '0';
+        btn.innerHTML = '';
+    });
+};
+
+const saveMovingPlatformDataToMainCell = () => { // saving shit
+    if (!activeMovingPlatformOriginCell) return;
+
+    const savedCoords = Array.from(movingPlatformTable.querySelectorAll('button'))
+        .filter((btn) => Number(btn.dataset.place) > 0)
+        .sort((a, b) => Number(a.dataset.place) - Number(b.dataset.place))
+        .map((btn) => `row${Number(btn.dataset.row)},col${Number(btn.dataset.col)}`)
+        .join(';');
+
+    activeMovingPlatformOriginCell.dataset.savedMovingPlatform = savedCoords;
+    activeMovingPlatformOriginCell.innerHTML = savedCoords
+        ? `<span style="display:none;">${savedCoords}</span>`
+        : '';
+};
+
+const parseSavedMovingPlatformCoords = (savedValue = '') => {
+
+    const cellSize = 45;
+
+    if (!savedValue) return [];
+
+    return savedValue
+        .split(';')
+        .filter(Boolean)
+        .map((entry) => {
+            const match = entry.match(/row(\d+),col(\d+)/i);
+            if (!match) return null;
+
+            return {
+                X: (Number(match[2]) + 1) * cellSize,
+                Y: (Number(match[1]) + 1) * cellSize
+            };
+        })
+        .filter(Boolean);
+};
+
+const getMovingPlatformCreateCallFromCell = (cell, positionOverride = null) => {
+    if (!cell) return null;
+
+    const savedValue = cell.dataset.savedMovingPlatform || '';
+    const points = parseSavedMovingPlatformCoords(savedValue);
+    if (points.length === 0) return null;
+
+    const speedInput = document.getElementById('movingPlatform_inputSpeed');
+    const waitInput = document.getElementById('movingPlatform_inputWait');
+    const speed = Number(speedInput?.value) || 100;
+    const waitMs = Number(waitInput?.value) || 500;
+    const width = 90;
+    const height = 16;
+
+    return `createMoving(${JSON.stringify(points)}, ${speed}, ${waitMs}, ${width}, ${height});`;
+};
+
+const loadMovingPlatformMenuFromMainCell = (row, col) => { // loading shit
+    const mainCell = getMainGridButtonAt(row, col);
+    if (!mainCell) return;
+
+    wipeMovingPlatformMenu();
+
+    const savedCoords = mainCell.dataset.savedMovingPlatform || '';
+    if (!savedCoords) {
+        const originButton = getMovingPlatformButtonAt(row, col);
+        if (originButton) {
+            triggerMovingPlatformButton(originButton);
+        }
+        return;
+    }
+
+    const entries = savedCoords.split(';').filter(Boolean);
+    entries.forEach((entry, index) => {
+        const match = entry.match(/row(\d+),col(\d+)/i);
+        if (!match) return;
+
+        const targetRow = Number(match[1]);
+        const targetCol = Number(match[2]);
+        const targetButton = getMovingPlatformButtonAt(targetRow, targetCol);
+
+        if (targetButton) {
+            targetButton.dataset.place = String(index + 1);
+            setMovingPlatformButtonDisplay(targetButton);
+        }
+    });
+};
+
 const clickMovingPlatformCell = (row, col) => {
+    const mainCell = getMainGridButtonAt(row, col);
+    if (mainCell && mainCell.dataset.savedMovingPlatform) {
+        loadMovingPlatformMenuFromMainCell(row, col);
+        return mainCell;
+    }
+
     const button = getMovingPlatformButtonAt(row, col);
     return triggerMovingPlatformButton(button);
 };
@@ -321,20 +456,6 @@ movingPlatformTable.addEventListener('click', (event) => {
     const button = event.target.closest('button');
     triggerMovingPlatformButton(button);
 });
-
-if (gameField) { // console logging the clicked tile
-    gameField.addEventListener('click', (event) => {
-        const button = event.target.closest('button');
-        if (!button) return;
-
-        const row = Number(button.dataset.row);
-        const col = Number(button.dataset.col);
-
-        if (Number.isNaN(row) || Number.isNaN(col)) return;
-
-        console.log(`Game field button clicked at row ${row}, col ${col}`);
-    });
-}
 
 movingPlatformTable.querySelectorAll('button').forEach((btn) => {
     setMovingPlatformButtonDisplay(btn);
