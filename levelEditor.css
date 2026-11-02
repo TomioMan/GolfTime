@@ -39,6 +39,7 @@ td {
 .triangle-1{
     background: var(--bg-color);
     background: linear-gradient(43deg,var(--bg-color) 49%, var(--solid-color) 50%);
+    animation: triangle-1 250ms ease-in-out infinite;
 }
 .triangle-2{
     background: var(--bg-color);
@@ -51,6 +52,16 @@ td {
 .triangle-4{
     background: var(--bg-color);
     background: linear-gradient(calc(47deg + 270deg),var(--bg-color) 49%, var(--solid-color) 50%);
+}
+@keyframes triangle-1 {
+    0%, 100% {
+        background: var(--bg-color);
+        background: linear-gradient(43deg,var(--bg-color) 49%, var(--solid-color) 50%);
+    }
+    50% {
+        background: var(--bg-color);
+        background: linear-gradient(43deg,var(--bg-color) 49%, #4e4e58 50%);
+    }
 }
 .point {
     border: none;
@@ -121,6 +132,34 @@ td {
     background: #0d00ff;
     border-radius: 2px;
     animation: movingPlatformPulse 750ms ease-in-out infinite;
+}
+.booster-1, .booster-2, .booster-3, .booster-4{
+    width: 45px;
+    height: 41px;
+    transform: translateY(-1px) scaleY(1.1);
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+}
+.booster-1::after, .booster-2::after, .booster-3::after, .booster-4::after{
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: #ffea00;
+}
+.booster-1::after{
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+.booster-2::after{
+    clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+}
+.booster-3::after{
+    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+}
+.booster-4::after{
+    clip-path: polygon(100% 0%, 100% 100%, 0% 50%);
 }
 
 @keyframes movingPlatformPulse {

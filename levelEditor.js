@@ -55,17 +55,55 @@ document.addEventListener('DOMContentLoaded', function () {
         'empty', 
         'squere', 
         'triangle-1', 
-        'triangle-2', 
-        'triangle-3', 
-        'triangle-4', 
         'point', 
         'ball', 
         'descructive', 
         'hole',
-        'movingPlatform'
+        'movingPlatform',
+        'booster-1'
     ];
 
+    const triangleSprites = ['triangle-1', 'triangle-2', 'triangle-3', 'triangle-4'];
+    const boosterSprites = ['booster-1', 'booster-2', 'booster-3', 'booster-4'];
+    const spriteGroups = [triangleSprites, boosterSprites];
+    const allSpriteClasses = [...new Set([...sprites, ...spriteGroups.flat()])];
+
+    function cycleSpriteSequence(btn, spriteSequence, reverse = false) {
+        const currentSprite = spriteSequence.find((sprite) => btn.classList.contains(sprite));
+        if (!currentSprite) return false;
+
+        const currentIndex = spriteSequence.indexOf(currentSprite);
+        const nextIndex = reverse
+            ? (currentIndex - 1 + spriteSequence.length) % spriteSequence.length
+            : (currentIndex + 1) % spriteSequence.length;
+
+        spriteSequence.forEach((sprite) => btn.classList.remove(sprite));
+        btn.classList.add(spriteSequence[nextIndex]);
+        return true;
+    }
+
+    function getMatchingSpriteGroup(btn) {
+        return spriteGroups.find((group) =>
+            group.some((sprite) => btn.classList.contains(sprite))
+        );
+    }
+
+    function cycleSpriteFromButton(btn, reverse = false) {
+        const matchingGroup = getMatchingSpriteGroup(btn);
+        if (!matchingGroup) return false;
+        return cycleSpriteSequence(btn, matchingGroup, reverse);
+    }
+
+    function getNextSpriteFromMainCycle(btn) {
+        const currentSprite = getButtonSprite(btn);
+        const currentIndex = sprites.indexOf(currentSprite);
+        return sprites[(currentIndex + 1) % sprites.length];
+    }
+
     function getButtonSprite(btn) {
+        const matchingGroup = getMatchingSpriteGroup(btn);
+        if (matchingGroup) return matchingGroup[0];
+
         for (let i = 0; i < sprites.length; i++) {
             if (btn.classList.contains(sprites[i])) return sprites[i];
         }
@@ -73,21 +111,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function setButtonSprite(btn, state) {
-        for (let i = 0; i < sprites.length; i++) {
-            btn.classList.remove(sprites[i]);
-        }
+        allSpriteClasses.forEach((sprite) => btn.classList.remove(sprite));
         btn.classList.add(state);
     }
 
+    // Cycling the sprites
     tableButtons.forEach((btn, index) => {
         btn.dataset.num = index + 1;
         if (!btn.dataset.prev) btn.dataset.prev = getButtonSprite(btn);
 
         btn.addEventListener('contextmenu', function (e) { // right clicking
             e.preventDefault();
-            if (!btn.classList.contains('movingPlatform')) return;
 
             const button = e.target.closest('button');
+            if (!button) return;
+
+            if (cycleSpriteFromButton(button, e.shiftKey)) return;
+            if (!button.classList.contains('movingPlatform')) return;
 
             const row = Number(button.dataset.row);
             const col = Number(button.dataset.col);
@@ -98,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
             openMovingPlatformMenu(row, col);
         });
 
-        btn.addEventListener('mousedown', function (e) {
+        btn.addEventListener('mousedown', function (e) { // left clicking
             if (e.button !== 0) {
                 return;
             }
@@ -120,11 +160,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Normal click - cycle 
-            const current = getButtonSprite(btn);
-            const idx = sprites.indexOf(current);
-            const nextIdx = (idx + 1) % sprites.length;
-            setButtonSprite(btn, sprites[nextIdx]);
+            // Normal click - cycle
+            setButtonSprite(btn, getNextSpriteFromMainCycle(btn));
         });
     });
 
@@ -199,6 +236,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (movingPlatformFunction) {
                     finalFunctions.push(movingPlatformFunction);
                 }
+            }
+            if (btn.classList.contains("booster-1")) {
+                const x = (i % cols) * cellSize + 7;
+                const y = Math.floor(i / cols) * cellSize + 14;
+                finalFunctions.push(`createBoost(${x}, ${y}, 'up');`);
+            }
+            if (btn.classList.contains("booster-2")) {
+                const x = (i % cols) * cellSize - 1;
+                const y = Math.floor(i / cols) * cellSize + 7;
+                finalFunctions.push(`createBoost(${x}, ${y}, 'right');`);
+            }
+            if (btn.classList.contains("booster-3")) {
+                const x = (i % cols) * cellSize + 7;
+                const y = Math.floor(i / cols) * cellSize - 1;
+                finalFunctions.push(`createBoost(${x}, ${y}, 'down');`);
+            }
+            if (btn.classList.contains("booster-4")) {
+                const x = (i % cols) * cellSize + 14;
+                const y = Math.floor(i / cols) * cellSize + 7;
+                finalFunctions.push(`createBoost(${x}, ${y}, 'left');`);
             }
         }
 
@@ -373,9 +430,7 @@ const saveMovingPlatformDataToMainCell = () => { // saving shit
 };
 
 const parseSavedMovingPlatformCoords = (savedValue = '') => {
-
     const cellSize = 45;
-
     if (!savedValue) return [];
 
     return savedValue
