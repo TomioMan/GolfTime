@@ -452,7 +452,7 @@ window.levels = [
         },
 
         {
-            name: "Unc Triangle",
+            name: "Uncle Triangle",
             ballStartX: 427.5,
             ballStartY: 742.5,
             Sscore: 40,
@@ -685,7 +685,7 @@ window.levels = [
         },
 
         {
-            name: "It Boom",
+            name: "Boxes of Destruction",
             ballStartX: 112.5,
             ballStartY: 427.5,
             Sscore: 40,
@@ -1315,7 +1315,7 @@ window.levels = [
             ]
         },
         {
-            name: "Point?!",
+            name: "Yellow Sphere that makes you Smile",
             ballStartX: 202.5, 
             ballStartY: 202.5,
             Sscore: 5,

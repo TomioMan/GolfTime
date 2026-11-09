@@ -116,20 +116,25 @@ body {
     align-items: center;
     width: 280px;
     max-width: 280px;
-    overflow: hidden;
-    white-space: nowrap;
-    margin-top: 10px;
+    min-height: 32px;
+    margin: 0 0 10px 0;
     font-family: comic sans ms, sans-serif;
     color: white;
     font-size: 30px;
+    line-height: 1.2;
     z-index: 7;
+    overflow: visible;
+    transition: font-size 0.1s ease;
 }
 .level_indicator p {
-    margin: 0;
-    white-space: nowrap;
     width: 100%;
+    margin: 0;
     text-align: center;
-    overflow: hidden;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    overflow: visible;
+    line-height: 1.2;
 }
 @keyframes loadAnimation {
     0% {opacity: 0;}
@@ -240,6 +245,7 @@ body {
 }
 .victory_screen_left_level_name {
     font-size: 30px;
+    height: 50px;
 }
 .victory_screen_levels {
     display: flex;
@@ -248,18 +254,19 @@ body {
     align-items: center;
     flex-direction: row;
 }
-.victory_screen_levels_sidebar {
+.level_navigation {
     margin-top: 10px;
     display: flex;
     width: 90%;
     justify-content: center;
     align-items: center;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 10px;
 }
-.victory_screen_levels_sidebar button{
+.level_navigation button{
     display: flex;
-    width: 60px;
+    width: 70px;
     height: 60px;
     justify-content: center;
     align-items: center;
@@ -267,10 +274,10 @@ body {
     background-color: rgba(255, 255, 255, 0);
     border: none;
 }
-.victory_screen_levels_sidebar button:hover {
+.level_navigation button:hover {
     animation: levels_sidebar_button 0.2s ease-out forwards;
 }
-.victory_screen_levels_sidebar button img{
+.level_navigation button img{
     width: 60px;
     height: 60px;
     transform: translateX(0px);

@@ -125,16 +125,17 @@
         </div>
         <div class="sidebar_bottom">
             <div class="level_indicator" id="levelIndicator">
-                <p><span id="levelIndicatorLevel">00</span>-<span id="levelIndicatorWorld">01</span> - <span id="levelIndicatorName">Basics</span></p>
+                <p><span id="levelIndicatorLevel">00</span>-<span id="levelIndicatorWorld">01</span> - <span id="levelIndicatorName">LEVEL NAME</span></p>
             </div>
             <div class="level_stats">
                 <p class="level_time">Time: <span id="timer">0s</span></p>
                 <p class="level_hits">Strikes: <span id="strikeCounter">0</span></p>
             </div>
-            <div class="victory_screen_levels_sidebar">
+            <div class="level_navigation">
                 <button id="previousLevelButton2"><img src="media/images/arrow white.png" alt=""></button>
                 <button id="againLevelButton2"><img src="media/images/again white.png" alt=""></button>
                 <button id="nextLevelButton2"> <img src="media/images/arrow white.png" alt=""></button>
+                <button onclick="goHome()"><p>I WANNA GO HOME</p></button>
             </div>
             <div class="tutorial" id="tutorial">
                 <p>Hi! this is the first level, do you want a tutorial?</p>
@@ -193,5 +194,6 @@
     <script src="matter.js"></script>
     <script src="level-data.js"></script>
     <script src="main.js"></script>
+    <script src="tutorial.js"></script>
 </body>
 </html>

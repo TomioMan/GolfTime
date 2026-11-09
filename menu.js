@@ -110,6 +110,38 @@ function closeLevelSelection() {
     const levelSelector = document.getElementById("levelSelector")
     levelSelector.style.right = "100%";
 }
+
+function buildLevelSelector() {
+    const levelSelectorScroll = document.getElementById("levelSelectorScroll");
+    if (!levelSelectorScroll) return;
+
+    const levels = window.levels || [];
+
+    levelSelectorScroll.innerHTML = levels.map((world, worldIndex) => {
+        const worldNumber = String(worldIndex + 1).padStart(2, "0");
+        const buttons = world.map((level, levelIndex) => {
+            const levelNumber = String(levelIndex + 1).padStart(2, "0");
+            const levelName = level?.name || `Level ${levelNumber}`;
+
+            return `
+                <button onclick="goToLevel(${worldIndex}, ${levelIndex})">
+                    <p>${levelNumber}</p>
+                    <span>${levelName}</span>
+                </button>
+            `;
+        }).join("");
+
+        return `
+            <h1>WORLD ${worldNumber}</h1>
+            <div class="level_selector_world">
+                ${buttons}
+            </div>
+        `;
+    }).join("");
+}
+
+buildLevelSelector();
+
 function goToLevel(worldIndex, levelIndex) {
     localStorage.setItem("worldIndex", worldIndex);
     localStorage.setItem("levelIndex", levelIndex);

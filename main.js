@@ -298,13 +298,19 @@ function fitLevelIndicator() {
     const textNode = indicator.querySelector("p");
     if (!textNode) return;
 
-    let fontSize = 30;
-    indicator.style.fontSize = `${fontSize}px`;
+    indicator.style.height = "auto";
+    indicator.style.fontSize = "30px";
+    textNode.style.whiteSpace = "normal";
+    textNode.style.overflowWrap = "anywhere";
+    textNode.style.wordBreak = "break-word";
 
+    let fontSize = 20;
     while (textNode.scrollWidth > indicator.clientWidth && fontSize > LEVEL_INDICATOR_MIN_FONT_SIZE) {
         fontSize -= 1;
         indicator.style.fontSize = `${fontSize}px`;
     }
+
+    indicator.style.height = `${textNode.scrollHeight + 8}px`;
 }
 
 startTransition()
@@ -328,8 +334,10 @@ function goTo(href) {
     window.location.href = href
 };
 function goHome() {
-    transition()
-    setTimeout(() => goTo('menu.html'), 1200);
+    if(transitionEnded){
+        transition()
+        setTimeout(() => goTo('menu.html'), 1150);
+    }
 };
 
 
